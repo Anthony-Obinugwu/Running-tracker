@@ -1,11 +1,11 @@
 package unpopulardev.runners.run;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
+
+
 import java.util.List;
 import java.util.Optional;
 
@@ -27,14 +27,14 @@ public class RunController {
     Run findBy(@PathVariable Integer id) {
         Optional<Run> run = runRepository.findById(id);
         if(run.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new RunNotFoundException();
         }
         return run.get();
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
-    void create(@RequestBody Run run){
+    void create(@Valid @RequestBody Run run){
         runRepository.create(run);
     }
 
@@ -47,7 +47,7 @@ public class RunController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     void delete(@PathVariable Integer id) {
-        runRepository.delete(id);  // Use deleteById for deleting by id
+        runRepository.delete(id);
     }
 
 }

@@ -1,21 +1,19 @@
 package unpopulardev.runners.run;
 
 import jakarta.annotation.PostConstruct;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.ResponseStatus;
+
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.spi.ToolProvider.findFirst;
+
 
 @Repository
 public class RunRepository {
-    private List<Run> runs = new ArrayList<>();
+    private final List<Run> runs = new ArrayList<>();
 
     List<Run> findAll(){
         return runs;
@@ -23,7 +21,7 @@ public class RunRepository {
 
     Optional<Run> findById(Integer id) {
         return runs.stream()
-                .filter(run -> run.id().equals(id)) // Use .equals() to compare objects
+                .filter(run -> run.id().equals(id))
                 .findFirst();
     }
 
@@ -33,9 +31,7 @@ public class RunRepository {
 
     void update(Run run, Integer id) {
         Optional<Run> existingRun = findById(id);
-        if (existingRun.isPresent()){
-            runs.set(runs.indexOf(existingRun.get()),run);
-        }
+        existingRun.ifPresent(value -> runs.set(runs.indexOf(value), run));
     }
 
     void delete(Integer id) {
@@ -48,7 +44,7 @@ public class RunRepository {
                 1,
                 "Monday morning run",
                 LocalDateTime.now(),
-                LocalDateTime.now().plus(30, ChronoUnit.MINUTES),
+                LocalDateTime.now().plusMinutes(30),
                 3,
                 Location.INDOOR
         ));
@@ -56,8 +52,8 @@ public class RunRepository {
         runs.add(new Run(
                 2,
                 "Wednesday evening run",
-                LocalDateTime.now(),
-                LocalDateTime.now().plus(30, ChronoUnit.MINUTES),
+                LocalDateTime.of(2024, 9, 11, 8, 0),
+                LocalDateTime.of(2024, 9, 11, 9, 0),
                 3,
                 Location.INDOOR
         ));
